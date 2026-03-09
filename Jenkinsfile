@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        sonarScanner 'sonar-scanner'
+        sonarRunner 'sonar-scanner'
     }
 
     stages {
@@ -18,10 +18,9 @@ pipeline {
                 withSonarQubeEnv('sonarqube') {
                     sh '''
                     sonar-scanner \
-                    -Dsonar.projectKey=end-to-end-cicd \
+                    -Dsonar.projectKey=simpleweb \
                     -Dsonar.sources=. \
-                    -Dsonar.host.url=http://13.201.167.133:9000 \
-                    -Dsonar.login=$SONAR_AUTH_TOKEN
+                    -Dsonar.host.url=http://13.201.167.133:9000
                     '''
                 }
             }
@@ -37,7 +36,7 @@ pipeline {
             steps {
                 sh '''
                 docker rm -f simpleweb || true
-                docker run -d --name simpleweb -p 8082:80 simpleweb
+                docker run -d -p 8082:80 --name simpleweb simpleweb
                 '''
             }
         }
